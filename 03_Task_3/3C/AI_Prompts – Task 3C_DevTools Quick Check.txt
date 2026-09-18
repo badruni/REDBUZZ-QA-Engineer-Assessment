@@ -1,0 +1,27 @@
+AI Tool Used: ChatGPT
+
+1. AI Prompt
+Act as a Senior QA Engineer specializing in browser DevTools and web application testing.
+Help me analyze Task 3C of the REDBUZZ QA Engineer (AI Native) assessment.
+Task: Submit the SauceDemo login form with both username and password empty. Use Chrome DevTools to determine whether validation happens on the client or server.
+Observed evidence:
+Both username and password fields were empty.
+The Login button was clicked.
+The application displayed: "Epic sadface: Username is required."
+No new HTTP request was observed in the Network tab after clicking Login.
+Based only on this evidence:
+Determine whether the observed validation occurs on the client or server.
+Explain how the Network evidence supports the conclusion.
+Identify the limitations of this observation.
+Provide a concise, professional English verbal answer for the interviewer.
+Do not claim that server-side validation is absent without additional evidence.
+
+2. AI Usage Disclosure
+AI tool used: ChatGPT.
+ChatGPT assisted in preparing the DevTools investigation steps, interpreting the observed Network activity, and refining the verbal explanation.
+The actual browser testing and evidence verification were performed manually.
+
+3. Manual Verification
+I manually submitted the login form with both username and password empty while monitoring Chrome DevTools.
+The application displayed "Epic sadface: Username is required," and no new HTTP request was observed.
+This supports client-side validation for the tested scenario but does not prove that server-side validation is absent.

@@ -1,0 +1,27 @@
+AI Tool Used:** ChatGPT Work
+
+Act as a Senior QA Engineer.
+
+Open [https://www.saucedemo.com](https://www.saucedemo.com) and perform exploratory testing for Task 2 of my QA assessment.
+
+Use the available demo accounts and password: secret\_sauce.
+
+Test the following areas:
+
+1. Login functionality and special user accounts.
+2. Product listing and sorting.
+3. Product detail pages.
+4. Add/remove items from cart.
+5. Cart persistence after logout and login.
+6. Checkout validation and order completion.
+7. Browser navigation and application state.
+8. Console and Network errors, if accessible.
+
+For every finding, document the exact steps, expected result, actual result, and available evidence.
+
+Do not invent bugs or claim tests were executed if they were not.
+
+Select 2–3 confirmed bugs, including at least one non-obvious finding, and write professional bug reports using the REDBUZZ assessment template.
+
+Clearly distinguish confirmed defects from unverified observations.
+And then Create output as .xlsx File @Spreadsheets

@@ -1,0 +1,125 @@
+Act as a Senior QA Engineer with strong SQL and database testing expertise.
+
+Help me complete Task 3B – SQL for the REDBUZZ QA Engineer (AI Native) assessment.
+
+Time limit: 7 minutes.
+
+OBJECTIVE:
+Answer all three SQL assessment questions accurately and generate a professional Microsoft Word (.docx) document containing the final answers.
+
+DATABASE SCHEMA:
+Table: Bookings
+
+Columns:
+- BookingID
+- GuestName
+- RoomType
+- CheckIn
+- CheckOut
+- AmountIDR
+- Status
+
+Possible Status values:
+COMPLETED, PENDING, CANCELLED, FAILED.
+
+TASK 1 – SQL AGGREGATION
+Write an SQL query to calculate the total AmountIDR per RoomType for COMPLETED bookings with CheckIn dates in July 2026.
+
+Requirements:
+- Filter Status = 'COMPLETED'.
+- Include CheckIn dates from July 1 through July 31, 2026.
+- Use a half-open date range that works correctly if CheckIn contains a timestamp.
+- Group results by RoomType.
+- Use SUM(AmountIDR).
+- Provide a meaningful alias.
+- Explain the query briefly.
+
+TASK 2 – DUPLICATE BOOKING DETECTION
+Write an SQL query to find GuestNames who have more than one booking on the same CheckIn date.
+
+Requirements:
+- Group by GuestName and CheckIn date.
+- Use COUNT(*) and HAVING COUNT(*) > 1.
+- Return GuestName, CheckIn date, and booking count.
+- Handle CheckIn timestamps by extracting the date.
+- Do not filter by booking status unless explicitly required.
+- Explain the query briefly.
+
+TASK 3 – QA DATABASE INTEGRITY
+Answer the interview question:
+
+'Someone inserted a row with CheckOut < CheckIn. As QA, how would you have prevented that data from existing?'
+
+Cover:
+1. Clarify whether CheckOut must be strictly later than CheckIn.
+2. Frontend validation.
+3. Backend/API validation.
+4. Database CHECK constraint.
+5. Negative and boundary testing.
+6. Direct database insertion and API bypass testing.
+
+Provide a PostgreSQL-compatible CHECK constraint example.
+
+IMPORTANT:
+- Do not invent database records or execution results.
+- Use PostgreSQL-compatible SQL and state the dialect assumption.
+- Clearly distinguish prevention from detection.
+- Keep the answers concise, accurate, and suitable for a 7-minute assessment.
+- Write all assessment content in professional English.
+
+WORD DOCUMENT REQUIREMENTS:
+Generate a downloadable Microsoft Word (.docx) file named:
+
+REDBUZZ_Task_3B_SQL.docx
+
+Use the following document structure:
+
+Title:
+REDBUZZ – QA Engineer (AI Native)
+Candidate Assessment
+
+Section:
+Task 3B – SQL
+
+3B.1 SQL Aggregation
+- SQL query
+- Brief explanation
+
+3B.2 Duplicate Booking Detection
+- SQL query
+- Brief explanation
+
+3B.3 QA Database Integrity
+- Concise interview answer
+- Example SQL CHECK constraint
+
+AI Usage Disclosure
+- AI tool used: ChatGPT
+- How AI was used: SQL query drafting, syntax review, and database integrity analysis.
+- Include the prompt used, or place it in a clearly identified appendix.
+
+DOCUMENT FORMATTING:
+- A4 page size.
+- Normal margins.
+- Professional heading hierarchy.
+- Font: Calibri or Aptos, size 11 for body text.
+- SQL code: Consolas, size 10, with light gray shading.
+- Use clear section headings and consistent paragraph spacing.
+- Preserve SQL indentation and line breaks.
+- Avoid unnecessary decorative elements.
+- Keep the main answers within approximately 1–2 pages, excluding the prompt appendix.
+- Include page numbers in the footer.
+
+QUALITY CONTROL:
+Before delivering:
+1. Verify SQL syntax and logical correctness.
+2. Confirm July date boundaries include the entire month.
+3. Verify duplicate detection groups by date, not full timestamp.
+4. Ensure the CHECK constraint prevents invalid checkout dates.
+5. Verify the Word file is valid and readable.
+6. Do not claim SQL execution or database verification unless actually performed.
+
+FINAL DELIVERABLE:
+Provide the downloadable file REDBUZZ_Task_3B_SQL.docx.
+
+Also display a concise preview of the three answers in the chat.

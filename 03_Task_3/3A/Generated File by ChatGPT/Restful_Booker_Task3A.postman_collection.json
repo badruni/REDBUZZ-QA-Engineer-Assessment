@@ -1,0 +1,868 @@
+{
+  "info": {
+    "_postman_id": "af2b309d-2d66-4cf7-9b94-43e3d825458d",
+    "name": "Restful Booker - REDBUZZ Task 3A",
+    "description": "Automated API workflow for REDBUZZ QA Engineer (AI Native) Task 3A. Official docs: https://restful-booker.herokuapp.com/apidoc/index.html. Run sequentially. qaReportJSON contains non-sensitive per-request report rows. Token is never copied into report output.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "TC-API-001 | Obtain Authentication Token",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.unset('token');",
+              "pm.environment.unset('existingId');",
+              "pm.environment.unset('bookingId');",
+              "pm.environment.set('qaReportJSON', '[]');"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-001\",\"auth\":\"No\",\"bodySummary\":\"Official username/password (password omitted from report)\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "let data = {};",
+              "qaTest('Response is valid JSON', () => { data = pm.response.json(); pm.expect(data).to.be.an('object'); });",
+              "qaTest('Authentication token exists', () => { pm.expect(data.token).to.be.a('string').and.not.empty; });",
+              "if (data.token) pm.environment.set('token', data.token);",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth"
+          ]
+        },
+        "description": "Official documented credentials. Clears stale run state before authentication."
+      }
+    },
+    {
+      "name": "TC-API-002 | List All Bookings",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-002\",\"auth\":\"No\",\"bodySummary\":\"None\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "let data = [];",
+              "qaTest('Booking list is a non-empty array', () => { data = pm.response.json(); pm.expect(data).to.be.an('array').that.is.not.empty; });",
+              "qaTest('First booking has a valid bookingid', () => pm.expect(data[0].bookingid).to.be.a('number'));",
+              "if (data[0] && Number.isInteger(data[0].bookingid)) pm.environment.set('existingId', String(data[0].bookingid));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        },
+        "description": "Lists booking IDs and captures the first usable ID."
+      }
+    },
+    {
+      "name": "TC-API-003 | Retrieve Existing Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('existingId'))) {",
+              "  console.warn(\"SKIP TC-API-003: existingId was not captured.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-003\",\"auth\":\"No\",\"bodySummary\":\"None\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "qaTest('Booking detail follows documented schema', () => {",
+              "  const b = pm.response.json();",
+              "  pm.expect(b.firstname).to.be.a('string'); pm.expect(b.lastname).to.be.a('string');",
+              "  pm.expect(b.totalprice).to.be.a('number'); pm.expect(b.depositpaid).to.be.a('boolean');",
+              "  pm.expect(b.bookingdates).to.be.an('object');",
+              "});",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{existingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{existingId}}"
+          ]
+        },
+        "description": "Retrieves the existing ID captured from the list. The detail representation does not include bookingid."
+      }
+    },
+    {
+      "name": "TC-API-004 | Create New Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-004\",\"auth\":\"No\",\"bodySummary\":\"Distinctive REDBUZZ booking; IDR 315000; 2026-10-10 to 2026-10-12\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "let data = {};",
+              "qaTest('Creation returns a valid booking ID', () => { data = pm.response.json(); pm.expect(data.bookingid).to.be.a('number'); });",
+              "qaTest('Created booking matches submitted data', () => pm.expect(data.booking).to.deep.eql({\"firstname\":\"REDBUZZ-AI-Native\",\"lastname\":\"Task3A-Run\",\"totalprice\":315000,\"depositpaid\":true,\"bookingdates\":{\"checkin\":\"2026-10-10\",\"checkout\":\"2026-10-12\"},\"additionalneeds\":\"API assessment automation\"}));",
+              "if (Number.isInteger(data.bookingid)) pm.environment.set('bookingId', String(data.bookingid));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstname\": \"REDBUZZ-AI-Native\",\n  \"lastname\": \"Task3A-Run\",\n  \"totalprice\": 315000,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-10-10\",\n    \"checkout\": \"2026-10-12\"\n  },\n  \"additionalneeds\": \"API assessment automation\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        },
+        "description": "Creates distinctive REDBUZZ assessment test data and captures bookingId."
+      }
+    },
+    {
+      "name": "TC-API-005 | Verify Created Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId'))) {",
+              "  console.warn(\"SKIP TC-API-005: bookingId was not captured.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-005\",\"auth\":\"No\",\"bodySummary\":\"None\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "qaTest('Persisted booking matches create payload', () => pm.expect(pm.response.json()).to.deep.eql({\"firstname\":\"REDBUZZ-AI-Native\",\"lastname\":\"Task3A-Run\",\"totalprice\":315000,\"depositpaid\":true,\"bookingdates\":{\"checkin\":\"2026-10-10\",\"checkout\":\"2026-10-12\"},\"additionalneeds\":\"API assessment automation\"}));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-API-006 | Update Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId') && pm.environment.get('token'))) {",
+              "  console.warn(\"SKIP TC-API-006: bookingId or token is missing.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-006\",\"auth\":\"Cookie token required\",\"bodySummary\":\"Full update; IDR 425000; 2026-11-15 to 2026-11-18\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "qaTest('PUT response matches update payload', () => pm.expect(pm.response.json()).to.deep.eql({\"firstname\":\"REDBUZZ-AI-Native-Updated\",\"lastname\":\"Task3A-Verified\",\"totalprice\":425000,\"depositpaid\":false,\"bookingdates\":{\"checkin\":\"2026-11-15\",\"checkout\":\"2026-11-18\"},\"additionalneeds\":\"Updated by Task 3A\"}));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Cookie",
+            "value": "token={{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstname\": \"REDBUZZ-AI-Native-Updated\",\n  \"lastname\": \"Task3A-Verified\",\n  \"totalprice\": 425000,\n  \"depositpaid\": false,\n  \"bookingdates\": {\n    \"checkin\": \"2026-11-15\",\n    \"checkout\": \"2026-11-18\"\n  },\n  \"additionalneeds\": \"Updated by Task 3A\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-API-007 | Verify Updated Booking Persists",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId') && pm.environment.get('token'))) {",
+              "  console.warn(\"SKIP TC-API-007: update prerequisites are missing.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-007\",\"auth\":\"No\",\"bodySummary\":\"None\",\"expected\":\"200\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Status code is 200', () => pm.expect(pm.response.code).to.eql(200));",
+              "qaTest('Updated data persists after GET', () => pm.expect(pm.response.json()).to.deep.eql({\"firstname\":\"REDBUZZ-AI-Native-Updated\",\"lastname\":\"Task3A-Verified\",\"totalprice\":425000,\"depositpaid\":false,\"bookingdates\":{\"checkin\":\"2026-11-15\",\"checkout\":\"2026-11-18\"},\"additionalneeds\":\"Updated by Task 3A\"}));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-API-008 | Delete Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId') && pm.environment.get('token'))) {",
+              "  console.warn(\"SKIP TC-API-008: bookingId or token is missing; destructive request not sent.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-008\",\"auth\":\"Cookie token required\",\"bodySummary\":\"None\",\"expected\":\"201\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "qaTest('Status code is 201', () => pm.expect(pm.response.code).to.eql(201));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-API-009 | Verify Booking Is Deleted",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId') && pm.environment.get('token'))) {",
+              "  console.warn(\"SKIP TC-API-009: delete prerequisites are missing.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-009\",\"auth\":\"No\",\"bodySummary\":\"None\",\"expected\":\"404\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "qaTest('Deleted booking returns 404', () => pm.expect(pm.response.code).to.eql(404));",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-API-010 | Negative - Create Booking With Missing Required Fields",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-010\",\"auth\":\"No\",\"bodySummary\":\"Only firstname; other documented fields omitted\",\"expected\":\"UNDOCUMENTED - capture actual for investigation\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Actual response status is captured', () => pm.expect(pm.response.code).to.be.a('number'));",
+              "console.warn('INVESTIGATION TC-API-010: official documentation does not define invalid-payload status/body. Actual status=' + pm.response.code);",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstname\": \"REDBUZZ-Negative-Only\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        },
+        "description": "Negative behavior/status is not specified by official docs; captures actual behavior for investigation without inventing a contract."
+      }
+    },
+    {
+      "name": "TC-API-011 | Negative - Update Booking Without Authentication",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!(pm.environment.get('bookingId'))) {",
+              "  console.warn(\"SKIP TC-API-011: safe deleted bookingId is unavailable.\");",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const qaMeta = {\"testId\":\"TC-API-011\",\"auth\":\"Intentionally omitted\",\"bodySummary\":\"PUT against already-deleted run booking; no token\",\"expected\":\"UNDOCUMENTED - capture actual for investigation\"};",
+              "let qaPassed = true;",
+              "function qaTest(name, assertion) {",
+              "  pm.test(qaMeta.testId + ' | ' + name, function () {",
+              "    try { assertion(); } catch (error) { qaPassed = false; throw error; }",
+              "  });",
+              "}",
+              "",
+              "qaTest('Actual response status is captured', () => pm.expect(pm.response.code).to.be.a('number'));",
+              "console.warn('INVESTIGATION TC-API-011: official documentation does not define missing-auth status/body. Actual status=' + pm.response.code);",
+              "",
+              "const safeBody = qaMeta.bodySummary || 'None';",
+              "let qaReport = [];",
+              "try { qaReport = JSON.parse(pm.environment.get('qaReportJSON') || '[]'); } catch (e) { qaReport = []; }",
+              "qaReport.push({",
+              "  testId: qaMeta.testId,",
+              "  requestName: pm.info.requestName,",
+              "  method: pm.request.method,",
+              "  endpoint: pm.variables.replaceIn(pm.request.url.toString()),",
+              "  authentication: qaMeta.auth,",
+              "  requestBodySummary: safeBody,",
+              "  expectedStatus: qaMeta.expected,",
+              "  actualStatus: pm.response.code,",
+              "  result: qaPassed ? 'PASS' : 'FAIL'",
+              "});",
+              "pm.environment.set('qaReportJSON', JSON.stringify(qaReport));",
+              "console.log('QA_RESULT ' + JSON.stringify(qaReport[qaReport.length - 1]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstname\": \"REDBUZZ-Unauthenticated-Attempt\",\n  \"lastname\": \"Task3A-Verified\",\n  \"totalprice\": 425000,\n  \"depositpaid\": false,\n  \"bookingdates\": {\n    \"checkin\": \"2026-11-15\",\n    \"checkout\": \"2026-11-18\"\n  },\n  \"additionalneeds\": \"Updated by Task 3A\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        },
+        "description": "Uses the already-deleted run booking ID so this negative request cannot modify live or unrelated data. Status is undocumented."
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://restful-booker.herokuapp.com",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "existingId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

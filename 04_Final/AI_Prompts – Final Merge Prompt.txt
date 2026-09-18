@@ -1,0 +1,129 @@
+Act as a Senior QA Engineer and professional technical documentation specialist.
+
+Help me consolidate my completed REDBUZZ QA Engineer (AI Native) assessment into ONE professional Microsoft Word document.
+
+I will upload all completed files for Tasks 1A, 1B, 1C, 2, 3A, 3B, and 3C, including AI prompts and available execution evidence.
+
+OBJECTIVE:
+Create a single submission-ready Microsoft Word (.docx) document.
+
+OUTPUT FILE:
+REDBUZZ_QA_Assessment_Final.docx
+
+IMPORTANT RULES:
+1. Read every uploaded file completely before merging.
+2. Preserve the original technical meaning and actual test results.
+3. Do not invent bugs, test executions, API responses, SQL execution results, or missing evidence.
+4. Do not silently change expected results, actual results, severity, priority, or Pass/Fail.
+5. If files contain conflicting information, identify the conflict and request clarification rather than choosing an unsupported result.
+6. Correct minor grammar and formatting issues without altering technical meaning.
+7. Preserve all required assessment content.
+8. Do not claim that AI executed tests that were actually performed manually.
+9. Clearly distinguish confirmed findings from unverified observations.
+10. Do not expose authentication tokens, passwords, or sensitive information.
+
+DOCUMENT STRUCTURE:
+
+COVER PAGE
+REDBUZZ – QA Engineer (AI Native)
+Candidate Assessment
+Candidate Name: Muhamad Badruni
+
+TASK 1 – AI-ASSISTED REQUIREMENT ANALYSIS & TEST DESIGN
+
+1A. Requirement Analysis
+- Clarifying questions
+- Missing requirements
+- Top 3 risks
+
+1B. AI-Assisted Test Case Generation
+- Include the complete final test case table.
+- Preserve the original test case IDs.
+- Preserve the asterisk (*) identifying the non-obvious edge case.
+- Preserve priorities and expected results.
+- Include the explanation of what was manually added, edited, or rejected and why.
+
+1C. Reviewing AI Output
+- Include every identified problem.
+- Include the proposed fix for each problem.
+- Preserve the distinction between hallucinations, missing coverage, wrong assumptions, and poor-quality test cases.
+
+TASK 2 – EXPLORATORY TESTING & BUG REPORTING
+- Include the exploratory testing summary.
+- Include 2–3 confirmed bug reports.
+- Preserve the REDBUZZ bug report template.
+- Include evidence references.
+- Do not convert unverified observations into confirmed bugs.
+
+TASK 3 – API TESTING + DATABASE + DEVTOOLS
+
+3A. API Testing with Postman
+- Include the complete API execution table.
+- Include every executed request.
+- Include expected and actual HTTP statuses.
+- Preserve Pass/Fail results.
+- Distinguish successful assertions from API contract compliance.
+- Include the developer observation.
+- Include negative test limitations where applicable.
+
+3B. SQL
+- Include both SQL queries.
+- Include the QA database integrity answer.
+- Preserve SQL formatting and indentation.
+- Do not claim SQL queries were executed.
+
+3C. DevTools Quick Check
+- Include the observed validation behavior.
+- Include the final English verbal answer.
+- State that no new HTTP request was observed after submitting the empty login form.
+- Explain that this supports client-side validation for the tested scenario but does not prove server-side validation is absent.
+
+AI USAGE DISCLOSURE
+- Provide a separate disclosure for each task.
+- Explain how AI was used and what was manually verified.
+- Preserve the actual AI usage history.
+
+APPENDIX A – AI PROMPTS
+- Include the exact prompts from the uploaded prompt files.
+- Do not rewrite prompts and present them as the original prompts.
+- Identify missing prompts if any.
+
+APPENDIX B – TEST EVIDENCE
+- Include relevant screenshots when available.
+- Add clear captions and references.
+- Include a summary of available supporting files.
+- Do not invent evidence.
+
+FORMATTING:
+- Microsoft Word .docx.
+- A4 paper.
+- Professional cover page.
+- Automatic table of contents if feasible.
+- Calibri or Aptos, size 11.
+- Consistent heading hierarchy.
+- SQL code in Consolas.
+- Landscape orientation for wide test case and API tables if necessary.
+- Repeat table headers across pages.
+- Page numbers in the footer.
+- Consistent table formatting.
+- No unnecessary decorative elements.
+
+QUALITY CONTROL:
+Before generating the final file:
+1. Verify all Tasks 1A–3C are included.
+2. Verify the Task 1B test case count is between 10 and 15.
+3. Verify Task 2 contains 2–3 confirmed bug reports.
+4. Verify Task 3A includes all executed requests and a developer observation.
+5. Verify Task 3B contains all three answers.
+6. Verify Task 3C contains the evidence-based conclusion.
+7. Verify AI usage is disclosed for every task.
+8. Verify the actual prompts are included.
+9. Check for missing sections, truncated tables, duplicate content, and formatting issues.
+10. Identify any missing or incomplete material rather than inventing it.
+
+DELIVERABLES:
+1. Downloadable REDBUZZ_QA_Assessment_Final.docx.
+2. A concise submission checklist showing complete, incomplete, or needs verification for each assessment requirement.
+3. A list of any issues requiring my attention before submission.
+
+Write the assessment document in professional English. Explain any remaining issues to me in Indonesian.

@@ -1,0 +1,5 @@
+1. Generate Postman Collection : by ChatGPT (create collection, environment and automated assertions)
+2. Import Collection : by User (import 2 files JSON ke Postman)
+3. Execute Collection Runner : by user using postman (running all API request)
+4. Export Execution Results : by user (save the test results as a JSON)
+5. Generate Assessment Report : by ChatGPT (read the test results and create report Task 3A in .xlsx format)

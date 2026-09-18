@@ -1,0 +1,48 @@
+Act as a Senior QA Engineer and help me complete Task 1C: Reviewing AI Output for a Wallet Top-Up web application.
+
+Context:
+A teammate generated 10 test cases entirely using AI without reviewing them. The original requirements state that users can enter an IDR amount, select Virtual Account, e-wallet, or credit card, and complete payment through a provider. On success, the wallet balance increases and a transaction record is created. The payment provider may be slow or fail, double charging must be prevented, and transaction history must display newest records first. Minimum amounts, maximum amounts, and daily limits have not been formally defined.
+
+Task:
+Critically review the 10 AI-generated test cases provided below. Identify every problem you can find, including:
+1. Hallucinated requirements or unsupported assumptions.
+2. Incorrect expected results or contradictions with the original requirements.
+3. Duplicate or redundant test cases.
+4. Vague, subjective, or non-verifiable expected results.
+5. Missing preconditions, test data, and incomplete test steps.
+6. Incorrect or unjustified priorities.
+7. Missing positive, negative, boundary, and critical edge-case coverage.
+8. Missing financial integrity, timeout, retry, idempotency, and transaction consistency scenarios.
+
+For each existing test case (TC-01 to TC-10), explain the specific problem, why it is a problem, and how to fix it.
+
+Then identify missing coverage that should be added before launch, prioritizing user and business impact.
+
+Use this output format:
+Section A – Review of Existing Test Cases: ID | Problem Identified | Why It Is a Problem | Recommended Fix.
+Section B – Missing Test Coverage: Missing Scenario | Risk | Recommended Test | Priority.
+Section C – Summary of Critical Findings: Briefly summarize the most important issues and recommended actions.
+
+Important instructions:
+- Do not invent business requirements or numeric limits.
+- Clearly distinguish confirmed requirements from assumptions requiring PM clarification.
+- Use specific and objectively verifiable expected results.
+- Apply risk-based prioritization rather than assigning High priority to every test case.
+- Do not assume that timeout means payment failure.
+- Focus on critical issues that should be resolved before launch.
+- Write the final answer in professional, concise English suitable for an 8-minute QA skill assessment.
+
+AI-generated test cases to review:
+TC-01 - Successful top-up. Steps: enter amount, pay. Expected: 'Top-up works correctly.'
+TC-02 - Top-up below minimum (Rp 5.000). Expected: error message shown.
+TC-03 - Daily limit enforcement (Rp 10.000.000/day). Expected: blocked with warning.
+TC-04 - Top-up with valid amount via Virtual Account. Priority: High. Expected: balance increases.
+TC-05 - Verify the UI looks good and is user friendly. Priority: High.
+TC-06 - User double-clicks Pay; refreshing the page is allowed. Expected: system shows an error.
+TC-07 - Top-up below minimum (Rp 10.000). Expected: rejected.
+TC-08 - Transaction history sorted oldest first. Expected: pass.
+TC-09 - Top-up from a different country. Priority: High.
+TC-10 - Very large amount (Rp 1.000.000.000). Expected: balance increases.
+All test cases: Priority = High. No preconditions or test data columns.
+
+Create report Task 3A in .xlsx format.

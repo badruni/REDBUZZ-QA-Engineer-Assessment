@@ -1,0 +1,104 @@
+# TASK 1A – Requirement Analysis
+Feature: Wallet Top-Up (Web Application)
+Objective: Identify ambiguities and missing requirements before testing, focusing on payment reliability, financial accuracy, transaction consistency, and user experience.
+
+## 1. Ambiguities and Missing Requirements
+The following questions should be clarified with the Product Manager, developers, and payment provider before testing.
+### A. Top-Up Amount and Transaction Limits
+1. What is the exact minimum top-up amount in IDR?
+2. What is the maximum amount allowed per transaction?
+3. What is the maximum daily top-up limit?
+4. Is the daily limit calculated based on successful transactions only, or does it also include pending and failed transactions?
+5. When does the daily limit reset, and which timezone is used?
+6. What happens if a user enters zero, a negative amount, a decimal, non-numeric characters, or an amount exceeding the limit?
+7. What happens when a top-up would exceed the remaining daily limit?
+### B. Payment Methods and Redirect
+1. Are Virtual Account, e-wallet partner, and credit card available to all users?
+2. Are there different transaction limits, fees, or processing times for each payment method?
+3. What happens if the payment provider is unavailable before the redirect?
+4. What happens if the redirect fails or the user closes the browser during payment?
+5. How does the application determine whether a payment has succeeded, failed, or is still processing?
+6. What happens if the user completes payment but never returns to the application?
+### C. Payment Failure, Slow Response, and Timeout
+1. What is the maximum response time before a payment request is considered timed out?
+2. What happens if the payment provider responds slowly but eventually processes the payment successfully?
+3. What happens if the payment provider returns an error?
+4. What happens if the payment provider successfully deducts the user's money but the application does not receive the success response?
+5. Does a timeout indicate a failed payment or an unknown payment status?
+6. Does the application automatically check the payment status with the provider after a timeout?
+7. Can users retry a payment while the previous transaction is still pending or has an unknown status?
+8. If money has been deducted but the wallet is not credited, will the system automatically reconcile the transaction or initiate a refund?
+9. What is the expected resolution time for payment discrepancies?
+Expected clarification: A timeout must not automatically be treated as a failed payment because the provider may have already processed the transaction.
+### D. Duplicate Payment and Double Charging
+1. What happens if a user double-clicks the Pay button?
+2. Is the Pay button disabled after the first click until the request is processed?
+3. How does the backend prevent duplicate payment requests if two requests arrive almost simultaneously?
+4. Does each top-up attempt have a unique transaction ID?
+5. Is an idempotency key used to ensure repeated requests for the same payment attempt cannot create duplicate charges?
+6. What happens if the same payment callback is received multiple times?
+7. Can the same successful provider transaction increase the wallet balance more than once?
+8. How are duplicate transactions detected and handled?
+Expected clarification: Duplicate prevention must be enforced by the backend, not only by disabling the Pay button.
+### E. Wallet Balance Consistency
+1. When exactly should the wallet balance increase: after the provider confirms payment, after the redirect, or after receiving a verified callback?
+2. Can the wallet balance increase while the payment status is still pending?
+3. What happens if payment succeeds but updating the wallet balance fails?
+4. What happens if the wallet balance is updated successfully but creating the transaction record fails?
+5. How does the system prevent the same successful payment from crediting the wallet multiple times?
+6. How are concurrent top-up transactions handled?
+7. Is there a reconciliation process to detect differences between payment records and wallet balances?
+8. What is the expected behavior when a successful payment is reversed or refunded?
+### F. Transaction Records and History
+1. When is a transaction record created: when the user clicks Pay or only after payment succeeds?
+2. Are failed, pending, timed-out, and refunded transactions recorded?
+3. What information must each record contain (transaction ID, amount, payment method, status, timestamp, fees, and provider reference)?
+4. Should the transaction record be created even if payment succeeds but the wallet balance update fails?
+5. How is the transaction status updated after a delayed provider response?
+6. How does the system ensure that transaction history and wallet balance remain consistent?
+7. Does `/transactions` display all transaction statuses or only successful transactions?
+8. Is the history sorted by transaction creation time or last update time?
+9. What timezone and timestamp format should be displayed?
+10. What happens if transaction history cannot be loaded?
+### G. User-Facing Payment Status and Error Messages
+1. What payment statuses should be displayed to users (Pending, Processing, Success, Failed, Timeout/Unknown, Refunded)?
+2. What message should appear when payment succeeds?
+3. What message should appear when payment fails?
+4. What message should appear when the provider is slow or times out?
+5. How can users determine whether their money has been deducted?
+6. Should users see a pending status while the application verifies an uncertain payment?
+7. Is there a payment status refresh mechanism?
+8. What instructions should users receive if money has been deducted but their wallet balance has not increased?
+9. Should users receive notifications when a pending transaction is resolved?
+10. How can users contact support and provide a transaction reference?
+Expected clarification: Users should receive clear payment status information and must not be instructed to retry an uncertain payment without duplicate-payment protection.
+
+## 2. Top 3 Risks Based on User and Business Impact
+1. Risk 1
+Critical
+## Duplicate Charging or Duplicate Wallet Credit
+Scenario: A user double-clicks Pay, retries after a timeout, or the provider sends duplicate callbacks. The system processes the same payment attempt more than once.
+User impact: Users may be charged multiple times for one intended top-up, causing financial loss and loss of trust.
+Business impact: Refund costs, increased support tickets, payment disputes, and potential financial losses from duplicate wallet credits.
+Required mitigation: Backend idempotency, unique transaction references, duplicate callback handling, and prevention of repeated wallet credits.
+2. Risk 2
+Critical
+## Payment Succeeds but Wallet Balance Is Incorrect
+Scenario: The payment provider successfully deducts the user's money, but a callback failure, timeout, or internal processing error prevents the wallet balance from increasing.
+User impact: Users lose access to money they have already paid and cannot use their purchased wallet balance.
+Business impact: Financial reconciliation discrepancies, manual investigations, compensation costs, and reduced customer trust.
+Required mitigation: Reliable payment confirmation, exactly-once wallet crediting, consistent transaction recording, and automatic reconciliation for incomplete transactions.
+3. Risk 3
+High
+## Unclear Payment Status and Inconsistent Transaction History
+Scenario: A payment provider is slow or times out. The application displays Failed even though the payment is still processing or has succeeded. The transaction history is missing or displays an incorrect status.
+User impact: Users cannot determine whether their money was deducted and may retry unnecessarily, potentially creating additional payments.
+Business impact: Increased support tickets, payment disputes, operational overhead, and customer dissatisfaction.
+Required mitigation: Clearly defined payment statuses, a mechanism to verify uncertain payments, accurate transaction history, and user-friendly status messages.
+## 3. QA Priority Before Launch
+Given that the launch is next week and there is no formal specification, I would prioritize clarifying and testing the three financial-critical flows first:
+1. Duplicate payment prevention: Verify that double-clicks, concurrent requests, retries, and duplicate callbacks do not result in unintended duplicate charges or wallet credits.
+2. Payment and wallet consistency: Verify that each confirmed successful payment credits the correct amount exactly once and produces an accurate transaction record.
+3. Timeout and payment status handling: Verify that slow responses, timeouts, and missing callbacks do not incorrectly mark successful payments as failed and that users receive accurate information.
+The remaining requirements, including amount validation, transaction limits, payment-method behavior, and transaction history sorting, should be clarified and covered based on their impact and available testing time.
+QA conclusion: The most important requirement to confirm before launch is how the system maintains consistency between the payment provider, wallet balance, and transaction history, especially when payments are duplicated, delayed, or interrupted. These behaviors must be explicitly defined rather than assumed during testing.

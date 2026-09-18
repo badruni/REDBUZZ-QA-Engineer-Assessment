@@ -1,0 +1,8 @@
+AI Tool Used:** ChatGPT
+
+1. Task 1A – Requirement Analysis
+How AI was used:
+I used ChatGPT to identify ambiguous requirements, missing business rules, and potential risks in the Wallet Top-Up feature. I reviewed the AI suggestions and prioritized the top three risks based on their impact on users and the business.
+
+Prompt Used:
+Analyze this Wallet Top-Up requirement from a QA perspective. Identify ambiguities and missing requirements that should be clarified before testing, and identify the top 3 risks based on user and business impact. Pay particular attention to payment failure, timeout, duplicate charging, wallet balance consistency, transaction records, and user-facing payment status.

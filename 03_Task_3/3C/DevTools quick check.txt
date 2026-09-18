@@ -1,0 +1,4 @@
+I submitted the login form with both username and password empty while monitoring the Network tab in Chrome DevTools.
+The application displayed the error message 'Epic sadface: Username is required,' but no new HTTP request was sent.
+This indicates that the empty-field validation is handled on the client side.
+However, this does not prove that server-side validation is absent.

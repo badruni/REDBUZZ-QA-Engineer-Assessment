@@ -1,0 +1,110 @@
+Act as a Senior QA Automation Engineer specializing in API testing and Postman.
+
+Help me complete Task 3A – API Testing with Postman for the REDBUZZ QA Engineer (AI Native) assessment.
+
+Target API: https://restful-booker.herokuapp.com
+Time limit: 15 minutes.
+
+OBJECTIVE:
+Generate a complete, importable Postman Collection v2.1 and Postman Environment that automate the entire assessment workflow.
+
+STEP 1 – API DOCUMENTATION
+First, read the official API documentation at the target website.
+Verify all endpoints, HTTP methods, authentication requirements, request schemas, and documented response statuses.
+Use the credentials published in the official documentation. Do not invent API behavior or expected statuses.
+
+STEP 2 – GENERATE TWO FILES
+Create:
+1. Restful_Booker_Task3A.postman_collection.json
+2. Restful_Booker_Task3A.postman_environment.json
+
+Provide both as downloadable files.
+
+STEP 3 – COLLECTION REQUIREMENTS
+Include requests in this exact logical order:
+
+01. POST /auth – Obtain authentication token.
+02. GET /booking – List all bookings.
+03. GET /booking/{existingId} – Retrieve one existing booking.
+04. POST /booking – Create a new booking.
+05. GET /booking/{bookingId} – Verify newly created booking.
+06. PUT /booking/{bookingId} – Update the booking.
+07. GET /booking/{bookingId} – Verify updated data persists.
+08. DELETE /booking/{bookingId} – Delete the booking.
+09. GET /booking/{bookingId} – Verify deletion.
+10. Negative test – Create booking with invalid or missing required fields.
+11. Negative test – Update booking without authentication.
+
+STEP 4 – VARIABLES
+Use:
+baseUrl
+token
+existingId
+bookingId
+
+Automatically:
+- Save the token from the authentication response.
+- Capture an existing booking ID from the booking list.
+- Capture bookingId from the create-booking response.
+- Reuse the correct ID in all subsequent requests.
+- Clear stale token and booking IDs at the beginning of each run.
+- Stop or safely skip dependent destructive requests if prerequisites fail.
+
+STEP 5 – REQUEST DATA
+Use valid booking data that complies with the documented API schema.
+
+Use distinctive test data to identify the booking created during this run.
+
+Use different values for the PUT update so persistence can be verified.
+
+Ensure negative tests cannot accidentally modify or delete the main test booking.
+
+STEP 6 – AUTOMATED ASSERTIONS
+Add Postman post-response scripts that verify:
+- Expected HTTP status codes.
+- Authentication token exists.
+- Booking list is valid.
+- Booking detail matches the requested ID where supported by the response.
+- Booking creation returns a valid booking ID.
+- Created booking data matches submitted data.
+- PUT changes are persisted after GET.
+- Deleted booking cannot be retrieved afterward.
+- Negative tests return the documented error response.
+
+Use pm.test() and pm.expect().
+
+For undocumented behavior, record the actual result and flag it for investigation rather than inventing an expected status.
+
+STEP 7 – REPORTING
+Each request must have a descriptive name and a unique test ID.
+
+Add scripts that capture:
+- Test ID
+- HTTP method
+- Endpoint
+- Authentication requirement
+- Request body summary
+- Expected status
+- Actual status
+- Pass/Fail
+
+Ensure the results can be retrieved from a Collection Runner export or Newman JSON report.
+
+Do not store sensitive tokens in report output.
+
+STEP 8 – QUALITY CHECK
+Before delivering the files:
+- Validate that both JSON files are syntactically correct.
+- Confirm Postman Collection schema v2.1.
+- Verify variable references and request ordering.
+- Ensure scripts use supported Postman sandbox APIs.
+- Avoid deprecated Postman APIs.
+- Do not claim that API requests were executed unless they actually were.
+
+DELIVERABLES:
+1. Downloadable Postman Collection JSON.
+2. Downloadable Postman Environment JSON.
+3. Short import and execution instructions.
+4. List of expected request sequence and documented statuses.
+
+Write explanations in Indonesian, but use English for request names, test scripts, and assessment-related content.

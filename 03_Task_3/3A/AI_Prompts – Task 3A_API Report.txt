@@ -1,0 +1,93 @@
+Act as a Senior QA Engineer and analyze the attached Postman Collection Runner execution results for Task 3A of the REDBUZZ QA Engineer (AI Native) assessment.
+
+Target API: https://restful-booker.herokuapp.com
+
+I have attached the actual execution results from Postman.
+
+IMPORTANT:
+Use only the attached execution data as evidence.
+Do not invent HTTP statuses, response bodies, Pass/Fail results, or observations.
+
+TASK 1 – ANALYZE EXECUTION RESULTS
+Extract every executed request and identify:
+- Request ID
+- HTTP method
+- Endpoint
+- Authentication requirement
+- Request body summary
+- Expected HTTP status
+- Actual HTTP status
+- Assertion results
+- Overall Pass/Fail
+
+Distinguish HTTP success from assertion success.
+If any required information is missing from the export, mark it as Not Available rather than guessing.
+
+TASK 2 – VERIFY CRUD WORKFLOW
+Confirm whether the evidence demonstrates:
+1. Authentication token was obtained.
+2. Booking list was retrieved.
+3. Existing booking details were retrieved.
+4. A new booking was created.
+5. The newly created booking was verified.
+6. The booking was updated.
+7. Updated data persisted after a subsequent GET.
+8. The booking was deleted.
+9. A subsequent GET confirmed deletion.
+
+Do not claim a step passed without execution evidence.
+
+TASK 3 – NEGATIVE TESTS
+Analyze at least two negative tests.
+
+For each negative test:
+- Identify the invalid condition.
+- Compare expected behavior with actual response.
+- Determine whether it passed or failed.
+- Explain any contract mismatch.
+
+TASK 4 – EXECUTION REPORT
+Create the exact assessment table:
+
+# | Endpoint & method | Auth? | Body (summary) | Expected status | Actual status | Pass/Fail
+
+Include every executed request, including verification requests and negative tests.
+
+TASK 5 – DEVELOPER OBSERVATION
+Identify one unusual, risky, or undocumented API behavior supported by the actual execution evidence.
+
+Explain:
+- Observed behavior.
+- Expected behavior or documentation gap.
+- Potential risk.
+- Recommendation for developers.
+
+Do not present an unverified hypothesis as a confirmed defect.
+
+TASK 6 – FINAL QA ASSESSMENT
+Summarize:
+- Total requests executed.
+- Passed requests.
+- Failed requests.
+- CRUD verification result.
+- Negative test results.
+- Remaining risks.
+
+TASK 7 – AI USAGE DISCLOSURE
+Write a short, professional AI Usage Disclosure explaining how ChatGPT assisted with:
+- API documentation analysis.
+- Postman Collection generation.
+- Automated assertions.
+- Execution result analysis.
+- Final report preparation.
+
+Clearly state that actual API execution was performed through Postman, not fabricated by AI.
+
+OUTPUT REQUIREMENTS:
+- Write the final assessment report in professional English.
+- Follow the REDBUZZ Task 3A deliverable format.
+- Keep the report concise and suitable for a 15-minute assessment.
+- Do not expose authentication tokens or credentials.
+- Identify any missing evidence that prevents a reliable conclusion.
+
+Generate a final submission-ready report based exclusively on the attached execution results.

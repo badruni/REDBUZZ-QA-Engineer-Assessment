@@ -1,0 +1,53 @@
+AI Tool Used:** ChatGPT
+2. Task 1B – AI-Assisted Test Case Generation
+How AI was used:
+I used ChatGPT to generate test cases covering positive, negative, boundary, and edge scenarios. I reviewed and refined the results to prioritize financial integrity, payment reliability, and critical scenarios before launch.
+
+Prompt Used:
+Act as a Senior QA Engineer and help me complete Task 1B: AI-Assisted Test Case Generation for a Wallet Top-Up web application.
+
+Feature requirements:
+- Users can enter a top-up amount in IDR.
+- Users can select Virtual Account, e-wallet partner, or credit card.
+- Users click Pay and are redirected to the payment provider.
+- On successful payment, the wallet balance increases and a transaction record is created.
+- Minimum top-up amount and maximum transaction/daily limits are not clearly defined.
+- The system must prevent double charging when users click Pay twice.
+- The payment provider may be slow, fail, or time out.
+- Users must be able to understand whether their money was deducted.
+- Transaction history is available at /transactions and displays newest records first.
+
+Task:
+1. Generate 10–15 test cases covering positive, negative, boundary, and edge scenarios.
+2. Use the table columns: ID, Title, Precondition, Steps, Test Data, Expected Result, Priority.
+3. Prioritize the cases that should actually be executed before launch next week.
+4. Focus on financial risks, including duplicate charges, timeout handling, retry behavior, wallet balance consistency, and transaction records.
+5. Include at least one non-obvious edge case that AI might typically miss and mark it with an asterisk (*).
+6. Use clear, specific, and verifiable expected results.
+7. Do not invent missing business requirements. Clearly identify assumptions that require PM confirmation.
+8. Use P0 for critical launch-blocking scenarios and P1 for high-priority scenarios.
+
+Generate the test cases in professional English and make them concise enough for a 14-minute QA skill assessment.
+
+---
+
+3. AI Output Review and Improvements
+
+I reviewed the AI-generated output and made the following improvements:
+
+- Consolidated repetitive validation scenarios to keep the final test set within 15 test cases.
+- Prioritized critical financial scenarios, including double charging, payment timeout, duplicate callbacks, and wallet balance consistency.
+- Refined expected results to verify payment charges, wallet credits, and transaction records rather than relying only on UI messages.
+- Identified undefined business rules as assumptions requiring PM confirmation.
+- Added TC-015* to cover concurrent top-up requests that could bypass the daily limit due to a race condition.
+
+These improvements were made to ensure the final test cases are risk-based, practical, and focused on scenarios that should be tested before launch.
+
+---
+
+4. Final Review
+
+I used AI as an assistant to accelerate requirement analysis and test case generation. I reviewed the output using my QA judgment, focusing on financial integrity, user impact, and launch readiness.
+
+All undefined business rules and proposed expected behaviors require confirmation from the PM before being treated as final acceptance criteria.
+And then Create as .xlsx File
